@@ -1,5 +1,6 @@
 package com.example.shifr.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -17,4 +18,6 @@ interface Daodb {
     suspend fun update(modeldb: Modeldb)
     @Query("SELECT*FROM requestHistory")
     fun getAllModeldb(): Flow<List<Modeldb>>
+    @Query("SELECT*FROM requestHistory")
+    fun getAllModeldbLiveData(): LiveData<List<Modeldb>>
 }

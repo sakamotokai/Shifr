@@ -24,11 +24,11 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    startFun()
                     //val scope = CoroutineScope(SupervisorJob()+Dispatchers.Default)
                     //val viewModelFactory = MainViewModelFactory(Repository())
                     val mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
                     //mainViewModel.getRequast()
+                    mainViewModel.initDatabase(applicationContext)
                     BottomBarNavigation()
                     /*mainViewModel.myResponse.observe(this, Observer { response->
                         if(response.isSuccessful){

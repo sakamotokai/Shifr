@@ -22,7 +22,12 @@ fun MainNavGraph(navController: NavHostController){
         route = Route.Root.route,
     startDestination = Route.MainScreen.route){
         composable(route = Route.MainScreen.route){
-            MainScreen(navController = navController)
+            MainScreen(
+                navController = navController,
+                navigateTo = {
+                    navController.navigate(Route.ContentScreen.route)
+                }
+            )
         }
 
         composable(route = Route.HistoryScreen.route){
