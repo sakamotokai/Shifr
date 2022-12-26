@@ -2,7 +2,6 @@ package com.example.shifr
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.material.ModalBottomSheetDefaults
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,9 +9,7 @@ import com.example.shifr.retrofit.Model.MainResponse
 import androidx.lifecycle.ViewModel
 import com.example.shifr.db.Database
 import com.example.shifr.db.Modeldb
-import com.example.shifr.retrofit.Model.Bank
-import com.example.shifr.retrofit.Model.Country
-import com.example.shifr.retrofit.Model.Number
+import com.example.shifr.screens.convertResponseToModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -31,26 +28,25 @@ class MainViewModel() : ViewModel() {
 
     private var _flowSavedb: MutableStateFlow<List<Modeldb>?> = MutableStateFlow(null)
     var flowSavedb: StateFlow<List<Modeldb>?> = _flowSavedb
-    var listData:MainResponse? = null
 
     fun initDatabase(context: Context) {
         globalDaodb = Database.getInstance(context).getDao()
+    }
+
+    fun getRequastInsertToRoom(endPoint: String) {
+        viewModelScope.launch {
+            val response = repository.getPost(endPoint)
+            _flowResponse.value = response
+            if (_flowResponse.value != null)
+                if (_flowResponse.value!!.isSuccessful)
+                    globalDaodb.insert(convertResponseToModel(response.body()!!))
+        }
     }
 
     fun getRequast(endPoint: String) {
         viewModelScope.launch {
             val response = repository.getPost(endPoint)
             _flowResponse.value = response
-        }
-    }
-
-    fun getRequastFlow(endPoint: String){
-        viewModelScope.launch {
-            repository.getData(endPoint)
-                .flowOn(Dispatchers.IO)
-                .collect{
-                    listData = it.body()
-                }
         }
     }
 
@@ -67,7 +63,7 @@ class MainViewModel() : ViewModel() {
 
     fun updateDataFromdb() {
         viewModelScope.launch(Dispatchers.IO) {
-            Repository().getAllModeldb.collect {
+            repository.getAllModeldb.collect {
                 _flowSavedb.value = it
             }
         }

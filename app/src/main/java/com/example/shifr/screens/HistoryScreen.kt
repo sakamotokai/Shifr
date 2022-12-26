@@ -44,8 +44,10 @@ fun HistoryScreen(
     }*/
     Scaffold {
         LazyColumn{
-            items(viewModel.flowSavedb.value!!){item->
-                HistoryCard(content = item)
+            if(viewModel.flowSavedb.value != null) {
+                items(viewModel.flowSavedb.value!!) { item ->
+                    HistoryCard(content = item)
+                }
             }
         }
     }

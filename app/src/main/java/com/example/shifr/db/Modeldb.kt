@@ -15,6 +15,7 @@ class Modeldb(
     // bankAddress = and so on")
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
+    @ColumnInfo
     val bankCity: String,
     val bankName: String,
     val bankPhone: String,
